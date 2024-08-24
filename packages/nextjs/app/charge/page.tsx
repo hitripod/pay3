@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { GoBackArrow } from "~~/components/navigation/GoBackArrow";
 import QRCode from "react-qr-code";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
@@ -12,8 +13,22 @@ export default function Cobrar() {
   const [amount, setAmount] = useState<string>("");
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
   const { user } = useDynamicContext();
-  // const invoiceAddress = "0x0546501475912C61eA1862693D2f4A542050A64619bAE0492250c57dCd0E2AAa"
+  const [ethAmount, setEthAmount] = useState<string>("");
+  const [ethPriceInJpy, setEthPriceInJpy] = useState<number | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
+
+  useEffect(() => {
+    const fetchEthPrice = async () => {
+      try {
+        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=jpy');
+        setEthPriceInJpy(response.data.ethereum.jpy);
+      } catch (error) {
+        console.error("Error fetching ETH price:", error);
+      }
+    };
+
+    fetchEthPrice();
+  }, []);
 
   const generateInvoice = async () => {
     let invoiceAddress2 = "kordan@kryptogo.com"
@@ -22,9 +37,13 @@ export default function Cobrar() {
       router.push("/");
       return;
     }
-    setPaymentLink(
-      `http://localhost:3000/pay/${invoiceAddress2}?amount=${amount}`
-    );
+    if (ethPriceInJpy) {
+      const ethValue = parseFloat(amount) / ethPriceInJpy;
+      setEthAmount(ethValue.toFixed(6));
+      setPaymentLink(
+        `http://localhost:3000/pay/${invoiceAddress2}?amount=${ethValue}`
+      );
+    }
   };
 
   const onCopyText = () => {
@@ -40,8 +59,11 @@ export default function Cobrar() {
         </h1>
         <div className="flex w-full flex-col items-center justify-center rounded-xl border-2 border-black bg-white p-6 shadow-md">
           <p className="mb-2 text-2xl font-semibold tracking-wide sm:text-3xl">
-            ${amount}
+            ¥{amount}
             <span className="ml-1 text-xl font-medium"> JPY</span>
+          </p>
+          <p className="text-lg font-medium">
+            ≈ {ethAmount} ETH
           </p>
         </div>
         <CopyToClipboard text={paymentLink} onCopy={onCopyText}>
@@ -80,13 +102,13 @@ export default function Cobrar() {
               Amount to charge
             </label>
             <p className="truncate text-lg font-medium text-gray-500">
-              Write the amount you want to charge
+              Enter the amount in JPY you want to charge
             </p>
 
             <input
               inputMode="numeric"
               className="mb-10 flex h-28 w-full flex-col items-center gap-4 rounded-full rounded-xl border-2 border-2 border-black border-black bg-[#FFFCF9] bg-white p-2.5  p-6 text-center text-3xl shadow-[2px_2px_0px_rgba(0,0,0,1)] shadow-[2px_2px_0px_rgba(0,0,0,1)]  hover:bg-powder-100 focus:bg-[#fed2aa] focus:outline-none active:bg-powder-200"
-              placeholder="$1,200"
+              placeholder="¥10,000"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />

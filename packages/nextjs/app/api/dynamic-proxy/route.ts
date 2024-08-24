@@ -5,18 +5,26 @@ export async function POST(req: NextRequest) {
   const token = process.env.DYNAMIC_API_TOKEN;
   const environmentId = process.env.DYNAMIC_ENVIRONMENT_ID;
 
-  console.log("token", token);
-  console.log("environmentId", environmentId);
   try {
     const body = await req.json();
+    const { method, endpoint, data } = body;
+
+    // 構建完整的 URL
+    let url = endpoint.startsWith('http') 
+      ? endpoint 
+      : `https://app.dynamicauth.com/api/v0${endpoint}`;
+    
+    // 替換 URL 中的 {environmentId}
+    url = url.replace('{environmentId}', environmentId);
+
     const response = await axios({
-      method: 'POST',
-      url: `https://app.dynamicauth.com/api/v0/environments/${environmentId}/embeddedWallets`,
+      method: method || 'GET',
+      url: url,
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      data: body,
+      data: data,
     });
 
     return NextResponse.json(response.data, { status: response.status });

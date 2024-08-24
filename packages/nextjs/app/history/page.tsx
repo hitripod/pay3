@@ -4,79 +4,143 @@ import { useEffect, useState } from "react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { GoBackArrow } from "~~/components/navigation/GoBackArrow";
 import axios from "axios";
+import { formatEther } from "ethers";
 
-interface Payment {
+interface User {
   email: string;
-  amount: string;
   address: string;
-  time: string;
+  lastVisit: string;
+  transactions?: {
+    amount: string;
+    time: string;
+  }[];
 }
 
 const History = () => {
-  const [payments, setPayments] = useState<Payment[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const { user } = useDynamicContext();
 
+  // 添加一個縮短地址的輔助函數
+  const shortenAddress = (address: string, chars = 4) => {
+    return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`;
+  };
+
   useEffect(() => {
-    const fetchPaymentHistory = async () => {
+    const fetchUserHistory = async () => {
       if (!user) return;
 
       try {
+        // 1. 使用代理獲取用戶數據
         const response = await axios.post('/api/dynamic-proxy', {
-          identifier: user.email,
-          type: "email",
-          chains: ["EVM"],
-          chain: "EVM",
+          method: 'GET',
+          endpoint: '/environments/{environmentId}/users',
         });
 
-        // 解析響應數據
-        const paymentHistory: Payment[] = response.data.user.verifiedCredentials.map((vc: any) => ({
-          email: vc.email,
-          amount: "N/A", // 需要根據實際 API 返回數據調整
-          address: vc.address,
-          time: new Date(vc.lastSelectedAt).toLocaleString(),
-        }));
+        // 2. 處理用戶數據
+        const fetchedUsers = response.data.users;
+        const processedUsers: User[] = [];
 
-        setPayments(paymentHistory);
+        for (const currentUser of fetchedUsers) {
+          const lastSelectedWallet = currentUser.wallets.reduce((latest: any, wallet: any) => {
+            if (!latest || new Date(wallet.lastSelectedAt) > new Date(latest.lastSelectedAt)) {
+              return wallet;
+            }
+            return latest;
+          }, null);
+
+          if (!lastSelectedWallet) {
+            console.error(`No wallet found for user: ${currentUser.email}`);
+            continue;
+          }
+
+          const address = lastSelectedWallet.publicKey;
+
+          // 3. 使用 Lineascan API 獲取交易歷史（可選）
+          let transactions = [];
+          try {
+            const lineascanApiKey = '8ZVAV8BUH7HEZXZF23R51S5ZK732QFF816';
+            const lineascanResponse = await axios.get(`https://api-sepolia.lineascan.build/api`, {
+              params: {
+                module: 'account',
+                action: 'txlist',
+                address: address,
+                startblock: 0,
+                endblock: 99999999,
+                sort: 'desc',
+                apikey: lineascanApiKey
+              }
+            });
+
+            transactions = lineascanResponse.data.result.map((tx: any) => ({
+              amount: formatEther(tx.value),
+              time: new Date(parseInt(tx.timeStamp) * 1000).toLocaleString(),
+            }));
+          } catch (error) {
+            console.error(`Error fetching transactions for ${currentUser.email}:`, error);
+          }
+
+          processedUsers.push({
+            email: currentUser.email || 'N/A',
+            address: address,
+            lastVisit: new Date(currentUser.lastVisit).toLocaleString(),
+            transactions: transactions.length > 0 ? transactions : undefined,
+          });
+        }
+
+        setUsers(processedUsers);
       } catch (error) {
-        console.error("Error fetching payment history:", error);
+        console.error("Error fetching user history:", error);
+        setUsers([{
+          email: "Error fetching users",
+          address: "N/A",
+          lastVisit: new Date().toLocaleString(),
+        }]);
       }
     };
 
-    fetchPaymentHistory();
+    fetchUserHistory();
   }, [user]);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <GoBackArrow />
-      <h1 className="text-3xl font-bold mb-6">Payment History</h1>
+      <h1 className="text-3xl font-bold mb-6">User History</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
               <th className="py-2 px-4 border-b">Email</th>
-              <th className="py-2 px-4 border-b">Amount</th>
               <th className="py-2 px-4 border-b">Address</th>
-              <th className="py-2 px-4 border-b">Time</th>
+              <th className="py-2 px-4 border-b">Last Visit</th>
+              <th className="py-2 px-4 border-b">Transactions</th>
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment, index) => (
+            {users.map((user, index) => (
               <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : ""}>
-                <td className="py-2 px-4 border-b">{payment.email}</td>
-                <td className="py-2 px-4 border-b">{payment.amount}</td>
-                <td className="py-2 px-4 border-b">{payment.address}</td>
-                <td className="py-2 px-4 border-b">{payment.time}</td>
+                <td className="py-2 px-4 border-b">{user.email}</td>
+                <td className="py-2 px-4 border-b" title={user.address}>
+                  {shortenAddress(user.address)}
+                </td>
+                <td className="py-2 px-4 border-b">{user.lastVisit}</td>
+                <td className="py-2 px-4 border-b">
+                  {user.transactions ? (
+                    <ul>
+                      {user.transactions.map((tx, txIndex) => (
+                        <li key={txIndex}>
+                          Amount: {tx.amount} ETH, Time: {tx.time}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No transactions"
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-        <button
-          onClick={() => router.push("/")}
-          className=" mt-5 w-full rounded-xl border-2 border-black p-2.5 font-semibold hover:bg-blizzardblue-400 active:bg-blizzardblue-500"
-        >
-          Go back to home
-        </button>
     </div>
   );
 };
