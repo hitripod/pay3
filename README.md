@@ -2,26 +2,21 @@
 
 **The most affordable digital payment solution in Latin America, now powered by Linea. Accept cryptocurrencies with ease and receive your funds instantly in your local currency.**
 
-Pay3 mission is to bring a seamless Web2-like payment experience enhanced with the low-cost transactions enabled by Linea.
+Pay3’s mission is to bring a seamless Web2-like payment experience enhanced with the low-cost transactions enabled by Linea.
 
 In Latin America, 122 million people remain unbanked, relying solely on cash for their daily transactions. Pay3 aims to empower these individuals by providing a cheaper alternative to Visa and Mastercard for accepting digital payments.
 
-## Relevant Links
-
-| What? | Link |
-|---|---|
-| Test Dapp | https://pay3-linea.vercel.app/
+![Pay3 App Promotion Landscape](imgs/Pay3%20App%20Promotion%20Landscape.png)
 
 ## How it Works
 
 ### For Merchants
 
-1. **Enter the Charge Amount**: Simply input the amount you want to charge in your local currency. 
+   ![Crypto Wallet Balance](imgs/Crypto%20Wallet%20Balance.png)
 
+1. **Enter the Charge Amount**: Simply input the amount you want to charge in your local currency.
 2. **Generate Payment Link**: Let the customer scan the QR code to open the payment link, or send them the link directly.
-
 3. **Receive Payment**: The customer signs in with their Linea-compatible wallet and completes the payment.
-
 4. **Instant Local Currency Transfer**: Receive your funds instantly in your local currency, minimizing risk and simplifying your financial management.
 
 ### For Users
@@ -48,6 +43,13 @@ In Latin America, 122 million people remain unbanked, relying solely on cash for
 1. **User Session Management**: We’ve integrated [Dynamic XYZ](https://app.dynamic.xyz/) to manage user sessions and provide embedded wallets for merchants.
 2. **Two-Factor Authentication (2FA)**: Dynamic XYZ supports 2FA and maintains secure sessions throughout the merchant's experience.
 3. **Linea Wallet Compatibility**: Users can log in with their Linea-compatible wallets, and Dynamic XYZ handles all subsequent interactions, ensuring a smooth and secure payment experience.
+
+### Withdraw Funds
+
+For merchants, withdrawing funds is straightforward and instant:
+
+1. **Access the Withdraw Interface**: Navigate to the withdraw section in the app.
+2. **Complete the Withdrawal**: Enter the amount you want to withdraw and confirm the transaction. The funds will be transferred to your personal wallet instantly.
 
 ## Why Choose Pay3?
 

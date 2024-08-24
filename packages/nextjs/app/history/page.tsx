@@ -58,7 +58,10 @@ const History = () => {
           // 3. 使用 Lineascan API 獲取交易歷史（可選）
           let transactions = [];
           try {
-            const lineascanApiKey = '8ZVAV8BUH7HEZXZF23R51S5ZK732QFF816';
+            const lineascanApiKey = process.env.NEXT_PUBLIC_LINEASCAN_API_KEY;
+            if (!lineascanApiKey) {
+              throw new Error('Lineascan API key is not set');
+            }
             const lineascanResponse = await axios.get(`https://api-sepolia.lineascan.build/api`, {
               params: {
                 module: 'account',
