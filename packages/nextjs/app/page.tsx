@@ -70,7 +70,7 @@ const Home: NextPage = () => {
 
   if (!isLoggedIn) {
     return (
-      <main className="mx-auto flex h-full sm:pt-0 mt-8 w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0">
+      <main className="mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0 py-8">
         <div className="flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
           <p className="truncate text-sm font-medium text-gray-500">
             Please connect your wallet to proceed
@@ -81,7 +81,7 @@ const Home: NextPage = () => {
     );
   }
   return (
-    <main className="mx-auto flex h-full sm:pt-0 mt-8 w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0">
+    <main className="mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0 py-8">
       <div className=" w-full">
         <DynamicWidget />
       </div>

@@ -26,7 +26,7 @@ const ScaffoldStarkApp = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className="flex flex-col min-h-screen">
         {/* <Header /> */}
-        <main className="bg-green-50 h-screen">{children}</main>
+        <main className="bg-red-50 h-screen">{children}</main>
         <Footer />
       </div>
       <Toaster />

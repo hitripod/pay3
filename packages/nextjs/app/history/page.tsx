@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { GoBackArrow } from "~~/components/navigation/GoBackArrow";
 import axios from "axios";
 
 interface Payment {
@@ -46,6 +47,7 @@ const History = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <GoBackArrow />
       <h1 className="text-3xl font-bold mb-6">Payment History</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
@@ -69,6 +71,12 @@ const History = () => {
           </tbody>
         </table>
       </div>
+        <button
+          onClick={() => router.push("/")}
+          className=" mt-5 w-full rounded-xl border-2 border-black p-2.5 font-semibold hover:bg-blizzardblue-400 active:bg-blizzardblue-500"
+        >
+          Go back to home
+        </button>
     </div>
   );
 };
