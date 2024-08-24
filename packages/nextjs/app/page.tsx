@@ -31,7 +31,8 @@ const Home: NextPage = () => {
   useEffect(() => {
     const fetchBalance = async () => {
       if (userWallets.length > 0 && userWallets[0]) {
-        const provider = rpcProviders.evmDefaultProvider?.provider;
+        console.log(rpcProviders.evmProviders);
+        const provider = rpcProviders.evmProviders[6]?.provider;
         if (provider) {
           try {
             const walletBalance = await provider.getBalance({ address: userWallets[1].address });

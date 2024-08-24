@@ -5,8 +5,8 @@ import { ThemeProvider } from "~~/components/ThemeProvider";
 import { Providers } from "~~/library/providers";
 
 export const metadata: Metadata = {
-  title: "Chipi Stark",
-  description: "The best kind of Stark",
+  title: "Pay3",
+  description: "Pay Pay Pay",
   icons: "/logo.ico",
 };
 
