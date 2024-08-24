@@ -1,81 +1,60 @@
-# 🏗 Scaffold-ETH 2
+# Pay3 - Pay Pay Pay v0.1
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+**The most affordable digital payment solution in Latin America, now powered by Linea. Accept cryptocurrencies with ease and receive your funds instantly in your local currency.**
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+Pay3 mission is to bring a seamless Web2-like payment experience enhanced with the low-cost transactions enabled by Linea.
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+In Latin America, 122 million people remain unbanked, relying solely on cash for their daily transactions. Pay3 aims to empower these individuals by providing a cheaper alternative to Visa and Mastercard for accepting digital payments.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+## Relevant Links
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+| What? | Link |
+|---|---|
+| Test Dapp | https://pay3-linea.vercel.app/
 
-## Requirements
+## How it Works
 
-Before you begin, you need to install the following tools:
+### For Merchants
 
-- [Node (>= v18.17)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+1. **Enter the Charge Amount**: Simply input the amount you want to charge in your local currency. 
 
-## Quickstart
+2. **Generate Payment Link**: Let the customer scan the QR code to open the payment link, or send them the link directly.
 
-To get started with Scaffold-ETH 2, follow the steps below:
+3. **Receive Payment**: The customer signs in with their Linea-compatible wallet and completes the payment.
 
-1. Clone this repo & install dependencies
+4. **Instant Local Currency Transfer**: Receive your funds instantly in your local currency, minimizing risk and simplifying your financial management.
 
-```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
-yarn install
-```
+### For Users
 
-2. Run a local network in the first terminal:
+1. **Open the Payment Link**: Access the payment link and sign in with your Linea-compatible wallet.
+2. **Pay with Crypto**: Make the payment with Ether or other supported cryptocurrencies with extremely low fees, thanks to Linea's efficient transaction processing.
 
-```
-yarn chain
-```
+## Technical Overview
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.ts`.
+### Linea Integration
 
-3. On a second terminal, deploy the test contract:
+1. **Optimized Transaction Costs**: Linea offers highly efficient transaction processing with lower fees, making it a perfect fit for regions with price-sensitive users.
+2. **Scalability and Speed**: Linea’s architecture supports high transaction throughput with quick finality, ensuring that payments are processed swiftly and without delays.
+3. **Interoperability**: Linea is designed to be compatible with a wide range of Ethereum-based tools and infrastructure, making it easy to integrate and expand.
 
-```
-yarn deploy
-```
+### Backend Integration
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+1. **Linea Wallet Creation**: The backend automatically creates a Linea-compatible wallet using account abstraction, ensuring secure and streamlined transactions.
+2. **Fund Management**: The backend facilitates the transfer of funds from the user's wallet to the merchant’s wallet.
+3. **Fee Sponsorship**: With Paymaster integration, transaction fees are sponsored, reducing the cost for the end-user.
 
-4. On a third terminal, start your NextJS app:
+### Dynamic XYZ Integration
 
-```
-yarn start
-```
+1. **User Session Management**: We’ve integrated [Dynamic XYZ](https://app.dynamic.xyz/) to manage user sessions and provide embedded wallets for merchants.
+2. **Two-Factor Authentication (2FA)**: Dynamic XYZ supports 2FA and maintains secure sessions throughout the merchant's experience.
+3. **Linea Wallet Compatibility**: Users can log in with their Linea-compatible wallets, and Dynamic XYZ handles all subsequent interactions, ensuring a smooth and secure payment experience.
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+## Why Choose Pay3?
 
-**What's next**:
+- **Cost Efficiency**: Drastically reduce transaction fees compared to traditional payment methods like Visa and Mastercard.
+- **Seamless Experience**: Enjoy a user-friendly interface that abstracts the complexities of crypto transactions, presenting everything in local currency.
+- **Instant Settlements**: Get paid instantly in your local currency, with no delays or exchange rate risks.
+- **Empowering the Unbanked**: Provide an accessible digital payment option to the unbanked population in Latin America, opening new avenues for financial inclusion.
+- **Linea-Powered Scalability**: Benefit from Linea’s scalable, fast, and low-cost blockchain technology, optimized for high transaction volumes.
 
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
-- Edit your smart contract test in: `packages/hardhat/test`. To run test use `yarn hardhat:test`
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Join us on our journey to revolutionize digital payments in Latin America with Pay3 - Pay Pay Pay!
